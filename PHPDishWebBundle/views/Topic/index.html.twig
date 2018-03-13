@@ -1,0 +1,49 @@
+{% extends "PHPDishWebBundle::layout.html.twig" %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="aw-content-wrap clearfix">
+                <div class="col-sm-12 col-md-9 aw-main-content">
+                    <!-- tab切换 -->
+                    <ul class="nav nav-tabs aw-nav-tabs active hidden-xs">
+                        {% set tab = app.request.query.get('tab') %}
+                        <li {% if not tab%}class="active"{% endif %}>
+                            <a href="{{ path('homepage') }}" id="sort_control_hot">全部</a>
+                        </li>
+                        <li {% if tab == 'following' %}class="active"{% endif %}>
+                            <a href="{{ path('homepage', {'tab': 'following'}) }}">关注</a>
+                        </li>
+                        <li {% if tab == 'recommend' %}class="active"{% endif %}>
+                            <a href="{{ path('homepage', {'tab': 'recommend'}) }}">推荐</a>
+                        </li>
+                        <h2 class="hidden-xs"><i class="icon icon-list"></i>发现</h2>
+                    </ul>
+                    <!-- end tab切换 -->
+                    <div class="aw-mod aw-explore-list">
+                        <div class="mod-body">
+                            <div class="aw-common-list">
+                                {% include 'PHPDishWebBundle:Topic:_topic_list.html.twig' %}
+                            </div>
+                        </div>
+                        <div class="mod-footer">
+                            <div class="page-control">
+                                {% if topics.haveToPaginate %}
+                                    {% from 'PHPDishWebBundle:Macros:paginator.html.twig' import paginator %}
+                                    {{ paginator(topics) }}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 侧边栏 -->
+                <div class="col-sm-12 col-md-3 aw-side-bar hidden-xs hidden-sm">
+                    {% include 'PHPDishWebBundle:Thread:_hot_threads.html.twig' %}
+                    {% include 'PHPDishWebBundle:User:_latest_register_user.html.twig' with {limit: 10} %}
+                </div>
+                <!-- end 侧边栏 -->
+            </div>
+        </div>
+    </div>
+{% endblock %}
